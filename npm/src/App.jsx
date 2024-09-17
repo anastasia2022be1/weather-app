@@ -4,8 +4,24 @@ import Inputs from './components/Inputs.jsx'
 import TimeAndLocation from './components/TimeAndLocation.jsx'
 import TemperatureAndDetails from './components/TemperatureAndDetails.jsx'
 import Forecast from './components/Forecast.jsx'
+import getFormattedWeatherData from './services/weatherService.js'
 
 function App() {
+
+  const fetchWeather = () => {
+  
+    getFormattedWeatherData({ q: 'london' })
+      .then(data => {
+   
+        console.log(data);
+      })
+      .catch(error => {
+      
+        console.error('Error fetching weather data:', error);
+      });
+  }
+  
+  fetchWeather();
   
   return (
     <>
