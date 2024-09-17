@@ -3,6 +3,7 @@ import TopButtons from './components/TopButtons.jsx'
 import Inputs from './components/Inputs.jsx'
 import TimeAndLocation from './components/TimeAndLocation.jsx'
 import TemperatureAndDetails from './components/TemperatureAndDetails.jsx'
+import Forecast from './components/Forecast.jsx'
 
 function App() {
   
@@ -14,6 +15,8 @@ function App() {
 
     <TimeAndLocation />
     <TemperatureAndDetails />
+    <Forecast title="hourly forecast" />
+    <Forecast title="daily forecast" />
   </div>
     </>
   )
