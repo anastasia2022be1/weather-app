@@ -16,7 +16,7 @@ function Inputs({ setQuery, units, setUnits }) {
 
   const handleLocationClick = () => {
     if (navigator.geolocation) {
-      toast.info("Fetching users location.");
+      toast.info("Fetching user's location.");
       navigator.geolocation.getCurrentPosition((position) => {
         toast.success("Location fetched!");
         let lat = position.coords.latitude;
@@ -31,14 +31,15 @@ function Inputs({ setQuery, units, setUnits }) {
   };
 
   return (
-    <div className="flex flex-row justify-center my-6">
-      <div className="flex flex-row w-3/4 items-center justify-center space-x-4">
+    <div className="flex flex-col sm:flex-row justify-center items-center my-6 space-y-4 sm:space-y-0 sm:space-x-4 w-full">
+      {/* Input and icons (search and location) */}
+      <div className="flex flex-row w-full sm:w-3/4 items-center space-x-4">
         <input
           value={city}
           onChange={(e) => setCity(e.currentTarget.value)}
           type="text"
-          placeholder="Search for city...."
-          className="text-xl font-light p-2 w-full shadow-xl focus:outline-none capitalize placeholder:lowercase"
+          placeholder="Search for city..."
+          className="text-lg sm:text-xl font-light p-2 w-full shadow-xl focus:outline-none capitalize placeholder:lowercase"
         />
         <UilSearch
           size={25}
@@ -52,18 +53,19 @@ function Inputs({ setQuery, units, setUnits }) {
         />
       </div>
 
-      <div className="flex flex-row w-1/4 items-center justify-center">
+      {/* Unit selection (°C / °F) */}
+      <div className="flex flex-row w-full sm:w-1/4 items-center justify-center space-x-2 sm:space-x-4">
         <button
           name="metric"
-          className="text-xl text-white font-light transition ease-out hover:scale-125"
+          className={`text-lg sm:text-xl text-white font-light transition ease-out hover:scale-125 ${units === "metric" ? "font-bold" : ""}`}
           onClick={handleUnitsChange}
         >
           °C
         </button>
-        <p className="text-xl text-white mx-1">|</p>
+        <p className="text-lg sm:text-xl text-white">|</p>
         <button
           name="imperial"
-          className="text-xl text-white font-light transition ease-out hover:scale-125"
+          className={`text-lg sm:text-xl text-white font-light transition ease-out hover:scale-125 ${units === "imperial" ? "font-bold" : ""}`}
           onClick={handleUnitsChange}
         >
           °F

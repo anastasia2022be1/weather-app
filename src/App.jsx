@@ -48,9 +48,10 @@ function App() {
   };
 
   return (
-    <div
-      className={`mx-auto max-w-screen-md mt-4 py-5 px-32 bg-gradient-to-br h-fit shadow-xl shadow-gray-400 ${formatBackground()}`}
-    >
+<div
+  className={`mx-auto max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-xl mt-4 py-5 px-4 sm:px-8 md:px-16 lg:px-32 bg-gradient-to-br h-fit shadow-xl shadow-gray-400 ${formatBackground()}`}
+>
+
       <TopButtons setQuery={setQuery} /> {/* Компонент для кнопок изменения запроса */}
       <Inputs setQuery={setQuery} units={units} setUnits={setUnits} /> {/* Компонент для ввода данных и изменения единиц измерения */}
 
