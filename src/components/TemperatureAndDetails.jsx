@@ -1,11 +1,8 @@
-import React from "react";
-import {
-  UilTemperature,
-  UilTear,
-  UilWind,
-  UilSun,
-  UilSunset,
-} from "@iconscout/react-unicons";
+import { FaThermometerEmpty } from "react-icons/fa";
+import { BiSolidDropletHalf } from "react-icons/bi";
+import { FaWind } from "react-icons/fa";
+import { GiSunrise, GiSunset } from "react-icons/gi";
+import { MdKeyboardArrowUp, MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { formatToLocalTime, iconUrlFromCode } from "../services/weatherService";
 
 function TemperatureAndDetails({
@@ -27,19 +24,19 @@ function TemperatureAndDetails({
   const verticalDetails = [
     {
       id: 1,
-      icon: <UilTemperature size={18} className="mr-1" />,
+      Icon: FaThermometerEmpty ,
       title: "Real feel",
       value: `${feels_like.toFixed()}°`,
     },
     {
       id: 2,
-      icon: <UilTear size={18} className="mr-1" />,
+      Icon: BiSolidDropletHalf,
       title: "Humidity",
       value: `${humidity.toFixed()}%`,
     },
     {
       id: 3,
-      icon: <UilWind size={18} className="mr-1" />,
+      Icon: FaWind,
       title: "Wind",
       value: `${speed.toFixed()} km/h`,
     },
@@ -49,25 +46,25 @@ function TemperatureAndDetails({
   const horizontalDetails = [
     {
       id: 1,
-      icon: <UilSun size={18} className="mr-1" />,
+      Icon: GiSunrise,
       title: "Rise",
       value: formatToLocalTime(sunrise, timezone, "hh:mm a"),
     },
     {
       id: 2,
-      icon: <UilSunset size={18} className="mr-1" />,
+      Icon: GiSunset,
       title: "Set",
       value: formatToLocalTime(sunset, timezone, "hh:mm a"),
     },
     {
       id: 3,
-      icon: <UilSun size={18} className="mr-1" />,
+      Icon: MdKeyboardArrowUp,
       title: "High",
       value: `${temp_max.toFixed()}°`,
     },
     {
       id: 4,
-      icon: <UilSun size={18} className="mr-1" />,
+      Icon: MdOutlineKeyboardArrowDown,
       title: "Low",
       value: `${temp_min.toFixed()}°`,
     },
@@ -88,15 +85,15 @@ function TemperatureAndDetails({
           className="w-20 sm:w-24"
         />
         <p className="text-4xl sm:text-5xl">{`${temp.toFixed()}°`}</p>
-        <div className="flex flex-col space-y-2">
-          {verticalDetails.map(({ id, icon, title, value }) => (
+        <div className="flex flex-col space-y-3 items-start justify-center">
+          {verticalDetails.map(({ id, Icon, title, value }) => (
             <div
               key={id}
-              className="flex font-light text-sm sm:text-base items-center justify-center"
-            >
-              {icon}
-              {title}:{" "}
-              <span className="font-medium ml-1">{value}</span>
+              className="flex font-light text-sm sm:text-base items-center justify-center">
+              <Icon size={18} className="mr-1" />
+              <p className="font-light ml-1">
+              {title}: <span className="font-medium ml-1">{value}</span>
+              </p>
             </div>
           ))}
         </div>
@@ -104,12 +101,11 @@ function TemperatureAndDetails({
 
       {/* Horizontal details like sunrise, sunset, high and low */}
       <div className="flex flex-col sm:flex-row items-center justify-center space-x-0 sm:space-x-2 space-y-2 sm:space-y-0 text-white text-sm sm:text-base py-3">
-        {horizontalDetails.map(({ id, icon, title, value }) => (
+        {horizontalDetails.map(({ id, Icon, title, value }) => (
           <div key={id} className="flex items-center">
-            {icon}
+            <Icon size={30} className="mr-1" />
             <p className="font-light">
-              {title}:{" "}
-              <span className="font-medium ml-1">{value}</span>
+              {title}: <span className="font-medium ml-1">{value}</span>
             </p>
             {id < horizontalDetails.length && (
               <p className="font-light hidden sm:block mx-2">|</p>

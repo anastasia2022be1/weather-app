@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 
-const API_KEY = "ef826c14ad4cb4d0bbf2c979f9f0b7dd"; // Ваш API-ключ для OpenWeatherMap
-const BASE_URL = "https://api.openweathermap.org/data/2.5"; // Базовый URL для запросов к API OpenWeatherMap
+const API_KEY = import.meta.env.VITE_API_KEY; // API-ключ для доступа к OpenWeatherMap
+const BASE_URL = import.meta.env.VITE_BASE_URL; // Базовый URL для запросов к OpenWeatherMap
 
 // Функция для получения текущих данных о погоде
 const getCurrentWeatherData = (searchParams) => {

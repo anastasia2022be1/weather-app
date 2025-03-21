@@ -1,4 +1,4 @@
-import "./App.css"; // Импорт стилей для приложения
+
 import TopButtons from "./components/TopButtons"; // Импорт компонента для верхних кнопок
 import Inputs from "./components/Inputs"; // Импорт компонента для ввода данных
 import TimeAndLocation from "./components/TimeAndLocation"; // Импорт компонента для отображения времени и локации
@@ -7,6 +7,7 @@ import getFormattedWeatherData from "./services/weatherService"; // Импорт
 import { useEffect, useState } from "react"; // Импорт хуков React для управления состоянием и побочными эффектами
 import { ToastContainer, toast } from "react-toastify"; // Импорт компонентов для отображения уведомлений
 import "react-toastify/dist/ReactToastify.css"; // Импорт стилей для уведомлений
+import Forecast from "./components/Forecast.jsx";
 
 function App() {
   // Хук состояния для хранения поискового запроса, единиц измерения и данных о погоде
@@ -61,6 +62,9 @@ function App() {
           <TemperatureAndDetails weather={weather} /> {/* Компонент для отображения температуры и подробностей */}
         </div>
       )}
+
+      <Forecast /> {/* Компонент для отображения прогноза погоды */}
+      <Forecast /> {/* Компонент для отображения прогноза погоды */}
 
       <ToastContainer autoClose={5000} theme="colored" newestOnTop={true} /> {/* Компонент для отображения уведомлений */}
     </div>
