@@ -4,7 +4,7 @@ A modern and responsive weather application built with React. It uses the OpenWe
 
 ## 🚀 Live Demo
 
-https://anastasia2022be1.github.io/weather-app/
+https://weather-app-with-openweather-api.netlify.app/
 
 ---
 
