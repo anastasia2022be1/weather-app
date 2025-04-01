@@ -6,7 +6,7 @@ function TimeAndLocation({ weather: { dt, timezone, name, country } }) {
       {/* Local Time Section */}
       <div className="flex items-center justify-center my-3 sm:my-6">
         <p className="text-white text-lg sm:text-xl font-extralight">
-          {formatToLocalTime(dt, timezone)}
+        {formatToLocalTime(dt, timezone)}
         </p>
       </div>
 

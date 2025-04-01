@@ -47,13 +47,13 @@ function TemperatureAndDetails({
     {
       id: 1,
       Icon: GiSunrise,
-      title: "Rise",
+      title: "Sunrise",
       value: formatToLocalTime(sunrise, timezone, "hh:mm a"),
     },
     {
       id: 2,
       Icon: GiSunset,
-      title: "Set",
+      title: "Sunset",
       value: formatToLocalTime(sunset, timezone, "hh:mm a"),
     },
     {

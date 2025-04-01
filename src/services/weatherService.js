@@ -1,83 +1,106 @@
 import { DateTime } from "luxon";
+import { getTimezoneIdByCoords } from "./getTimezoneIdByCoords.js";
 
-const API_KEY = import.meta.env.VITE_API_KEY; // API-ключ для доступа к OpenWeatherMap
-const BASE_URL = import.meta.env.VITE_BASE_URL; // Базовый URL для запросов к OpenWeatherMap
+const API_KEY = import.meta.env.VITE_API_KEY;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-// Функция для получения текущих данных о погоде
-const getCurrentWeatherData = (searchParams) => {
-    const url = new URL(`${BASE_URL}/weather`); // Создаем URL для запроса текущей погоды
-    url.search = new URLSearchParams({ ...searchParams, appid: API_KEY }); // Добавляем параметры запроса и API-ключ
+const getCurrentWeatherData = (infoType, searchParams) => {
+  const url = new URL(`${BASE_URL}/${infoType}`);
+  url.search = new URLSearchParams({ ...searchParams, appid: API_KEY });
 
-    return fetch(url) // Выполняем запрос к API
-        .then(response => {
-            if (!response.ok) { // Проверяем, был ли запрос успешным
-                return response.text() // Получаем текст ошибки
-                    .then(text => {
-                        throw new Error(`Error ${response.status}: ${text}`); // Выбрасываем ошибку с текстом
-                    });
-            }
-            return response.json(); // Возвращаем данные в формате JSON
-        })
-        .catch(error => {
-            console.error("Не удалось получить данные о погоде:", error); // Логируем ошибку
-            throw error; // Пробрасываем ошибку для дальнейшей обработки
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        return response.text().then(text => {
+          throw new Error(`Error ${response.status}: ${text}`);
         });
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error("Unable to retrieve weather data:", error);
+      throw error;
+    });
 };
 
-// Функция для форматирования текущей погоды
-const formatCurrentWeather = (data) => {
-    const {
-        coord: { lat, lon }, // Широта и долгота
-        main: { temp, feels_like, temp_min, temp_max, humidity }, // Основные данные о температуре и влажности
-        name, // Название города
-        dt, // Время получения данных
-        sys: { country, sunrise, sunset }, // Страна, время восхода и заката
-        weather, // Массив с информацией о погоде
-        wind: { speed }, // Скорость ветра
-    } = data;
-
-    const { main: details, icon } = weather[0]; // Основные детали погоды и иконка
-
-    return {
-        lat,
-        lon,
-        temp,
-        feels_like,
-        temp_min,
-        temp_max,
-        humidity,
-        name,
-        dt,
-        country,
-        sunrise,
-        sunset,
-        details,
-        icon,
-        speed,
-    };
-};
-
-// Функция для получения и форматирования данных о погоде
-const getFormattedWeatherData = (searchParams) => {
-    return getCurrentWeatherData(searchParams) // Получаем текущие данные о погоде
-        .then(formatCurrentWeather) // Форматируем текущую погоду
-        .catch((error) => {
-            console.error("Ошибка при получении или форматировании данных о погоде:", error); // Логируем ошибку
-            throw error; // Пробрасываем ошибку для дальнейшей обработки
-        });
-};
-
-// Функция для форматирования времени
-const formatToLocalTime = (
+export const formatToLocalTime = (
     secs,
-    zone,
-    format = "cccc, dd LLL yyyy' | Local time: 'hh:mm a"
-) => DateTime.fromSeconds(secs).setZone(zone).toFormat(format); // Форматируем время с использованием Luxon
+    zone = "UTC",
+    format = "cccc, dd LLL yyyy | hh:mm a"
+  ) => {
+    return DateTime
+      .fromMillis(secs * 1000) 
+      .setZone(zone)
+      .toFormat(format);
+  };
+  
 
-// Функция для формирования URL для иконок погоды
-const iconUrlFromCode = (code) =>
-    `http://openweathermap.org/img/wn/${code}@2x.png`; // Формируем URL для иконки погоды по коду
+const formatCurrentWeather = (data) => {
+  const {
+    coord: { lat, lon },
+    main: { temp, feels_like, temp_min, temp_max, humidity },
+    name,
+    dt,
+    sys: { country, sunrise, sunset },
+    weather,
+    wind: { speed },
+  } = data;
 
-export default getFormattedWeatherData; // Экспортируем функцию для получения и форматирования данных о погоде
+  const { main: details, icon } = weather[0];
 
-export { formatToLocalTime, iconUrlFromCode }; // Экспортируем функции форматирования времени и создания URL для иконок
+  return {
+    lat,
+    lon,
+    temp,
+    feels_like,
+    temp_min,
+    temp_max,
+    humidity,
+    name,
+    dt,
+    country,
+    sunrise,
+    sunset,
+    details,
+    icon,
+    speed,
+  };
+};
+
+const getFormattedWeatherData = async (searchParams) => {
+  const currentWeather = await getCurrentWeatherData("weather", searchParams)
+    .then(formatCurrentWeather);
+
+  const { lat, lon } = currentWeather;
+
+  const timezoneId = await getTimezoneIdByCoords(lat, lon);
+
+  const forecastData = await getCurrentWeatherData("forecast", {
+    lat,
+    lon,
+    units: searchParams.units,
+  });
+
+  const hourly = forecastData.list.slice(0, 6).map((d) => ({
+    dt: d.dt,
+    temp: d.main.temp,
+    icon: d.weather[0].icon,
+    timezone: timezoneId,
+  }));
+
+  const daily = forecastData.list
+    .filter((_, idx) => idx % 8 === 0)
+    .map((d) => ({
+      dt: d.dt,
+      temp: d.main.temp,
+      icon: d.weather[0].icon,
+      timezone: timezoneId,
+    }));
+
+  return { ...currentWeather, hourly, daily, timezone: timezoneId };
+};
+
+export const iconUrlFromCode = (code) =>
+  `http://openweathermap.org/img/wn/${code}@2x.png`;
+
+export default getFormattedWeatherData;
