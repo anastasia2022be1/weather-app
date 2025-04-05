@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BiSearch, BiCurrentLocation } from "react-icons/bi";
 import { toast } from "react-toastify";
 
 function Inputs({ setQuery, units, setUnits }) {
   const [city, setCity] = useState("");
+  const [unitWidth, setUnitsWidth] = useState(0);
+  const unitRef = useRef(null); // Create a ref to access the unit selection div
+
+
+  useEffect(() => {
+    if (unitRef.current) {
+      const width = unitRef.current.offsetWidth;
+      setUnitsWidth(width);
+    }
+    
+  },[])
 
   const handleUnitsChange = (e) => {
     const selectedUnit = e.currentTarget.name;
@@ -33,6 +44,14 @@ function Inputs({ setQuery, units, setUnits }) {
   return (
     <div className="flex flex-col sm:flex-row justify-center items-center my-6 space-y-4 sm:space-y-0 sm:space-x-4 w-full">
       {/* Input and icons (search and location) */}
+
+      <div className="bg-[#000000]" style={{width:unitWidth}}>
+        <div className="flex flex-row w-full sm:w-3/4 items-center justify-center space-x-4">
+          <div className="w-[25px]">
+
+          </div>
+        </div>
+      </div>
       <div className="flex flex-row w-full sm:w-3/4 items-center justify-center space-x-4">
         <input
           value={city}
@@ -57,7 +76,8 @@ function Inputs({ setQuery, units, setUnits }) {
       </div>
 
       {/* Unit selection (°C / °F) */}
-      <div className="flex flex-row w-full sm:w-1/4 items-center justify-center space-x-2 sm:space-x-4">
+      <div ref={unitRef}  // Reference to the unit selection div
+        className="flex flex-row w-full sm:w-1/4 items-center justify-center space-x-2 sm:space-x-4">
         <button
           name="metric"
           className={`text-lg sm:text-2xl text-white font-light transition ease-out hover:scale-125 ${units === "metric" ? "font-bold" : ""}`}
