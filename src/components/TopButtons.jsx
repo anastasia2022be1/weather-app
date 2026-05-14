@@ -8,11 +8,11 @@ function TopButtons({ setQuery }) {
   ];
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 my-4 sm:my-6">
+    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
       {cities.map((city) => (
         <button
           key={city.id}
-          className="text-white text-sm sm:text-lg font-medium transition ease-out hover:scale-110"
+          className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium uppercase text-white/80 shadow-sm shadow-black/10 transition duration-200 hover:-translate-y-0.5 hover:border-white/35 hover:bg-white/20 hover:text-white"
           onClick={() => setQuery({ q: city.title })}
         >
           {city.title}

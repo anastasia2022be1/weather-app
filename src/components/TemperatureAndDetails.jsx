@@ -1,6 +1,5 @@
-import { FaThermometerEmpty } from "react-icons/fa";
 import { BiSolidDropletHalf } from "react-icons/bi";
-import { FaWind } from "react-icons/fa";
+import { FaThermometerEmpty, FaWind } from "react-icons/fa";
 import { GiSunrise, GiSunset } from "react-icons/gi";
 import { MdKeyboardArrowUp, MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { formatToLocalTime, iconUrlFromCode } from "../services/weatherService";
@@ -23,13 +22,12 @@ function TemperatureAndDetails({
 }) {
   const windUnit = units === "imperial" ? "mph" : "m/s";
 
-  // Vertical details: real feel, humidity, wind speed
   const verticalDetails = [
     {
       id: 1,
-      Icon: FaThermometerEmpty ,
+      Icon: FaThermometerEmpty,
       title: "Real feel",
-      value: `${feels_like.toFixed()}°`,
+      value: `${feels_like.toFixed()}\u00B0`,
     },
     {
       id: 2,
@@ -45,7 +43,6 @@ function TemperatureAndDetails({
     },
   ];
 
-  // Horizontal details: sunrise, sunset, high/low temperatures
   const horizontalDetails = [
     {
       id: 1,
@@ -63,60 +60,63 @@ function TemperatureAndDetails({
       id: 3,
       Icon: MdKeyboardArrowUp,
       title: "High",
-      value: `${temp_max.toFixed()}°`,
+      value: `${temp_max.toFixed()}\u00B0`,
     },
     {
       id: 4,
       Icon: MdOutlineKeyboardArrowDown,
       title: "Low",
-      value: `${temp_min.toFixed()}°`,
+      value: `${temp_min.toFixed()}\u00B0`,
     },
   ];
 
   return (
-    <div className="w-full max-w-screen-md mx-auto">
-      {/* Weather details */}
-      <div className="flex items-center justify-center py-4 text-lg sm:text-xl text-cyan-300">
-        <p>{details}</p>
-      </div>
+    <section className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:items-stretch">
+      <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-white/[0.08] p-6 shadow-xl shadow-black/20 ring-1 ring-white/5 sm:p-8">
+        <div className="absolute right-6 top-6 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase text-emerald-100/80">
+          {details}
+        </div>
 
-      {/* Current temperature and vertical details */}
-      <div className="flex flex-col sm:flex-row items-center justify-between text-white py-3">
-        <img
-          src={iconUrlFromCode(icon)}
-          alt="weather icon"
-          className="w-20 sm:w-24"
-        />
-        <p className="text-4xl sm:text-5xl">{`${temp.toFixed()}°`}</p>
-        <div className="flex flex-col space-y-3 items-start justify-center">
-          {verticalDetails.map(({ id, Icon, title, value }) => (
-            <div
-              key={id}
-              className="flex font-light text-sm sm:text-base items-center justify-center">
-              <Icon size={18} className="mr-1" />
-              <p className="font-light ml-1">
-              {title}: <span className="font-medium ml-1">{value}</span>
-              </p>
-            </div>
-          ))}
+        <div className="flex min-h-64 flex-col justify-between gap-8 sm:min-h-72">
+          <div>
+            <img
+              src={iconUrlFromCode(icon)}
+              alt="weather icon"
+              className="h-24 w-24 drop-shadow-2xl sm:h-28 sm:w-28"
+            />
+            <p className="mt-2 text-[5rem] font-semibold leading-none text-white sm:text-[7rem]">
+              {`${temp.toFixed()}\u00B0`}
+            </p>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            {verticalDetails.map(({ id, Icon, title, value }) => (
+              <div
+                key={id}
+                className="rounded-2xl border border-white/10 bg-neutral-950/25 p-4"
+              >
+                <Icon size={18} className="mb-3 text-amber-100/80" />
+                <p className="text-xs uppercase text-white/45">{title}</p>
+                <p className="mt-1 text-lg font-semibold text-white">{value}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Horizontal details like sunrise, sunset, high and low */}
-      <div className="flex flex-col sm:flex-row items-center justify-center space-x-0 sm:space-x-2 space-y-2 sm:space-y-0 text-white text-sm sm:text-base py-3">
+      <div className="grid grid-cols-2 gap-3">
         {horizontalDetails.map(({ id, Icon, title, value }) => (
-          <div key={id} className="flex items-center">
-            <Icon size={30} className="mr-1" />
-            <p className="font-light">
-              {title}: <span className="font-medium ml-1">{value}</span>
-            </p>
-            {id < horizontalDetails.length && (
-              <p className="font-light hidden sm:block mx-2">|</p>
-            )}
+          <div
+            key={id}
+            className="rounded-3xl border border-white/15 bg-neutral-950/25 p-5 shadow-lg shadow-black/10 ring-1 ring-white/5"
+          >
+            <Icon size={28} className="text-emerald-100/80" />
+            <p className="mt-5 text-xs uppercase text-white/45">{title}</p>
+            <p className="mt-2 text-2xl font-semibold text-white">{value}</p>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 

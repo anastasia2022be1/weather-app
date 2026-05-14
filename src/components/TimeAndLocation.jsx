@@ -2,20 +2,16 @@ import { formatToLocalTime } from "../services/weatherService.js";
 
 function TimeAndLocation({ weather: { dt, timezone, name, country } }) {
   return (
-    <div className="w-full max-w-screen-md mx-auto">
-      {/* Local Time Section */}
-      <div className="flex items-center justify-center my-3 sm:my-6">
-        <p className="text-white text-lg sm:text-xl font-extralight">
+    <div className="flex flex-col items-center justify-center py-2 text-center">
+      <p className="text-sm font-light uppercase text-white/55">
         {formatToLocalTime(dt, timezone)}
-        </p>
-      </div>
-
-      {/* Location Section */}
-      <div className="flex items-center justify-center my-2 sm:my-3">
-        <p className="text-white text-2xl sm:text-3xl font-medium">
-          {`${name}, ${country}`}
-        </p>
-      </div>
+      </p>
+      <h1 className="mt-3 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+        {name}
+      </h1>
+      <p className="mt-2 text-sm font-medium uppercase text-emerald-100/70">
+        {country}
+      </p>
     </div>
   );
 }

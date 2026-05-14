@@ -8,4 +8,9 @@
     html {
         font-family: "Poppins", sans-serif;
     }
+
+    body {
+        min-height: 100vh;
+        background: #0a0a0a;
+    }
 }
