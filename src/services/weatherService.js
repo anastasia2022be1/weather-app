@@ -105,10 +105,10 @@ const getFormattedWeatherData = async (searchParams) => {
       timezone,
     }));
 
-  return { ...currentWeather, hourly, daily, timezone };
+  return { ...currentWeather, hourly, daily, timezone, units: searchParams.units };
 };
 
 export const iconUrlFromCode = (code) =>
-  `http://openweathermap.org/img/wn/${code}@2x.png`;
+  `https://openweathermap.org/img/wn/${code}@2x.png`;
 
 export default getFormattedWeatherData;

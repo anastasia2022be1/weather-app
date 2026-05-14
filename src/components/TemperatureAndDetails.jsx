@@ -18,8 +18,11 @@ function TemperatureAndDetails({
     humidity,
     feels_like,
     timezone,
+    units,
   },
 }) {
+  const windUnit = units === "imperial" ? "mph" : "m/s";
+
   // Vertical details: real feel, humidity, wind speed
   const verticalDetails = [
     {
@@ -38,7 +41,7 @@ function TemperatureAndDetails({
       id: 3,
       Icon: FaWind,
       title: "Wind",
-      value: `${speed.toFixed()} km/h`,
+      value: `${speed.toFixed()} ${windUnit}`,
     },
   ];
 
