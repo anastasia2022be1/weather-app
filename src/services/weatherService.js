@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { getTimezoneIdByCoords } from "./getTimezoneIdByCoords.js";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -28,8 +27,16 @@ export const formatToLocalTime = (
     zone = "UTC",
     format = "cccc, dd LLL yyyy | hh:mm a"
   ) => {
+    if (!Number.isFinite(secs)) return "";
+
+    if (Number.isFinite(zone)) {
+      return DateTime
+        .fromSeconds(secs + zone, { zone: "UTC" })
+        .toFormat(format);
+    }
+
     return DateTime
-      .fromMillis(secs * 1000) 
+      .fromSeconds(secs, { zone: "UTC" })
       .setZone(zone)
       .toFormat(format);
   };
@@ -41,6 +48,7 @@ const formatCurrentWeather = (data) => {
     main: { temp, feels_like, temp_min, temp_max, humidity },
     name,
     dt,
+    timezone,
     sys: { country, sunrise, sunset },
     weather,
     wind: { speed },
@@ -58,6 +66,7 @@ const formatCurrentWeather = (data) => {
     humidity,
     name,
     dt,
+    timezone,
     country,
     sunrise,
     sunset,
@@ -73,19 +82,18 @@ const getFormattedWeatherData = async (searchParams) => {
 
   const { lat, lon } = currentWeather;
 
-  const timezoneId = await getTimezoneIdByCoords(lat, lon);
-
   const forecastData = await getCurrentWeatherData("forecast", {
     lat,
     lon,
     units: searchParams.units,
   });
+  const timezone = forecastData.city?.timezone ?? currentWeather.timezone ?? 0;
 
   const hourly = forecastData.list.slice(0, 6).map((d) => ({
     dt: d.dt,
     temp: d.main.temp,
     icon: d.weather[0].icon,
-    timezone: timezoneId,
+    timezone,
   }));
 
   const daily = forecastData.list
@@ -94,10 +102,10 @@ const getFormattedWeatherData = async (searchParams) => {
       dt: d.dt,
       temp: d.main.temp,
       icon: d.weather[0].icon,
-      timezone: timezoneId,
+      timezone,
     }));
 
-  return { ...currentWeather, hourly, daily, timezone: timezoneId };
+  return { ...currentWeather, hourly, daily, timezone };
 };
 
 export const iconUrlFromCode = (code) =>

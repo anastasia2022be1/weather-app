@@ -56,7 +56,6 @@ Create a .env file in the root directory and add:
 ```
 VITE_API_KEY=your_openweather_api_key
 VITE_BASE_URL=https://api.openweathermap.org/data/2.5
-VITE_GEONAMES_USERNAME=your_geonames_username
 ```
 
 4. **Run the development server**
@@ -70,8 +69,6 @@ The app will be available at http://localhost:5173
 ## 💡 Credits
 
 - Weather data from [OpenWeather API](https://openweathermap.org/)
-
-- Timezone info from [GeoNames](https://www.geonames.org/)
 
 - Icons from [React Icons](https://react-icons.github.io/react-icons/)
 
